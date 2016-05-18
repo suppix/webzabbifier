@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="refresh" content="60" >
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>zabbix status</title>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+          integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <table class="table table-hover table-striped">
+        <thead class="thead-inverse">
+        <tr>
+            <th>#</th>
+            <th>Zabbix Server</th>
+            <th>Host</th>
+            <th>Trigger description</th>
+            <th>Last change</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set count = 1 %}
+        {% for trigger in trigger_list %}
+        {% set zabbix_server = trigger.zabbix_server %}
+        {% if trigger.zabbix_server is equalto previos_zabbix_server %}
+            {% set zabbix_server = " " %}
+        {% else %}
+            <tr><td colspan="5" bgcolor="#FFFFFF"></td></tr>
+            {% set count = 1 %}
+        {% endif %}
+        <tr class="{{ trigger.severity }}">
+            <th scope="row">{{ count }}</th>
+            <td><u><strong>{{ zabbix_server }}</strong></u></td>
+            <td>{{ trigger.hostname }}</td>
+            <td>{{ trigger.description }}</td>
+            <td>{{ trigger.lastchange }}</td>
+        </tr>
+        {% set count = count + 1 %}
+        {% set previos_zabbix_server = trigger.zabbix_server %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+        integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+        crossorigin="anonymous"></script>
+</body>
+</html>
