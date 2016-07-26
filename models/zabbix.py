@@ -5,7 +5,6 @@
 
 import json
 import requests
-import _mysql
 import logging
 
 class ZabbixServer:
