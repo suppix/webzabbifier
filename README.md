@@ -8,7 +8,7 @@ Simple script that collects all active triggers from several zabbix servers.
 
 2. cp config.ini.sample config.ini. Edit config.ini
 
-3. Configure web server to service zabbix_status.html page
+3. Configure web server to service status_page (see config.ini)
 
 4. Setup cron job:
 ```
