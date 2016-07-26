@@ -10,9 +10,10 @@ import logging
 import configparser
 from models.zabbix import *
 from urllib.parse import urlparse
-import datetime
+from datetime import datetime
 from jinja2 import Template, Environment, FileSystemLoader
 import os
+from dateutil.tz import tzlocal
 
 class Trigger:
     pass
@@ -61,7 +62,7 @@ for zbx_server in zbx_server_list:
             hostname_json = zbx_server.get_hostname_by_id(trigger_json['hosts'][0]['hostid'])
             hostname = hostname_json.json()['result'][0]['host']
 
-            date = datetime.datetime.fromtimestamp(int(trigger_json['lastchange'])).strftime('%Y-%m-%d %H:%M:%S')
+            date = datetime.fromtimestamp(int(trigger_json['lastchange'])).strftime('%Y-%m-%d %H:%M:%S')
 
             trigger = Trigger()
             trigger.zabbix_server = zbx_server.name
@@ -93,5 +94,5 @@ env = Environment(loader=FileSystemLoader(THIS_DIR),
 template = env.get_template(zabbix_status_template)
 
 f = open(dequote(config['default']['status_page']), 'w')
-f.write(template.render(trigger_list=trigger_list))
+f.write(template.render(trigger_list=trigger_list, date=datetime.now(tzlocal()).strftime("%Y-%m-%d %H:%M %Z")))
 f.close()
