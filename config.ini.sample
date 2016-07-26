@@ -1,12 +1,7 @@
 [default]
-logfile = /var/log/zabbix_collector/collector.log
+logfile = /var/log/zabbifier-web/collector.log
 loglevel = WARNING
 status_page = /var/www/html/index.html
-
-mysql_host = localhost
-mysql_username = zabbix
-mysql_password = XXXXXXXXXXXXX
-mysql_db = webzabbifier
 
 [first.zabbix.your.domain]
 url = https://your.domain.here
