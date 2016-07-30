@@ -13,6 +13,8 @@ from datetime import datetime
 from jinja2 import Template, Environment, FileSystemLoader
 import os
 from dateutil.tz import tzlocal
+import dateutil.relativedelta
+import time
 
 class Trigger:
     pass
@@ -28,6 +30,31 @@ def dequote(s):
     if (s[0] == s[-1]) and s.startswith(("'", '"')):
         return s[1:-1]
     return s
+
+def human_readable_date(timedelta):
+    age = ""
+    age_length = 0
+
+    if timedelta.years != 0:
+        age += str(timedelta.years) + "y "
+        age_length += 1
+    if timedelta.months != 0:
+        age += str(timedelta.months) + "m "
+        age_length += 1
+    if timedelta.days != 0:
+        age += str(timedelta.days) + "d "
+        age_length += 1
+    if timedelta.hours != 0 and age_length < 3:
+        age += str(timedelta.hours) + "h "
+        age_length += 1
+    if timedelta.minutes != 0 and age_length < 3:
+        age += str(timedelta.minutes) + "m "
+        age_length += 1
+    if timedelta.seconds != 0 and age_length < 3:
+        age += str(timedelta.seconds) + "s "
+        age_length += 1
+
+    return age
 
 # read config file
 config = configparser.ConfigParser()
@@ -85,6 +112,13 @@ for zbx_server in zbx_server_list:
 
             trigger.description = trigger_json['description']
             trigger.lastchange = date
+
+            dt1 = datetime.fromtimestamp(int(trigger_json['lastchange']))
+            dt2 = datetime.fromtimestamp(time.time())
+            rd = dateutil.relativedelta.relativedelta(dt2, dt1)
+
+            trigger.age = human_readable_date(rd)
+
             trigger_list.append(trigger)
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
