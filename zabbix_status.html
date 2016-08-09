@@ -31,8 +31,8 @@
         <tbody>
         {% set count = 1 %}
         {% for trigger in trigger_list %}
-        {% set zabbix_server = trigger.zabbix_server %}
-        {% if trigger.zabbix_server is equalto previos_zabbix_server %}
+        {% set zabbix_server = trigger.server_hostname %}
+        {% if trigger.server_hostname is equalto previos_zabbix_server %}
             {% set zabbix_server = " " %}
         {% elif count != 1 %}
 	    <tr><td colspan="6" bgcolor="#FFFFFF"></td></tr>
@@ -41,13 +41,13 @@
         <tr class="{{ trigger.severity }}">
             <td scope="row">{{ count }}</td>
             <td><u><strong>{{ zabbix_server }}</strong></u></td>
-            <td>{{ trigger.hostname }}</td>
+            <td>{{ trigger.agent_hostname }}</td>
             <td>{{ trigger.description }}</td>
             <td>{{ trigger.lastchange }}</td>
             <td>{{ trigger.age }}</td>
         </tr>
         {% set count = count + 1 %}
-        {% set previos_zabbix_server = trigger.zabbix_server %}
+        {% set previos_zabbix_server = trigger.server_hostname %}
         {% endfor %}
 	<tr><td colspan="6">Updated at: {{ date }}</td></tr>
         </tbody>
